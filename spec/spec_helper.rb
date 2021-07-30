@@ -4,7 +4,7 @@ ENV['RACK_ENV'] = 'test'
 
 # require our Sinatra app file
 require File.join(File.dirname(__FILE__), '..', './app/app.rb')
-
+require 'pg'
 require 'simplecov'
 require 'simplecov-console'
 require 'capybara'
@@ -13,7 +13,7 @@ require 'rspec'
 require 'features/helpers/web_helpers'
 require 'features/helpers/db_helpers'
 # tell Capybara about our app class
-Capybara.app = AppName
+Capybara.app = BookmarkManager
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                  SimpleCov::Formatter::Console
@@ -36,11 +36,11 @@ SimpleCov.start
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  # ** UNCOMMENT THIS CODE TO NAME YOUR DATABASE AND CLEAR THE TABLES PRIOR TO TESTING **
-
-  # config.before(:each) do
-  #   (PG.connect :dbname => 'YOUR DATABASE NAME HERE').exec("TRUNCATE table_name, table_name, table_name;")
-  # end
+  config.before(:each) do
+    (PG.connect dbname: 'bookmark_manager_test').exec('TRUNCATE TABLE bookmarks;')
+  rescue PG::Error => e
+    puts e.message
+  end
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

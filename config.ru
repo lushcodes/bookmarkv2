@@ -2,4 +2,4 @@
 
 require './app/app'
 
-run AppName
+run BookmarkManager

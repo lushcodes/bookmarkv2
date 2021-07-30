@@ -1,16 +1,24 @@
 # frozen_string_literal: true
 
+ENV['RACK_ENV'] ||= 'development'
+
 require 'sinatra/base'
 require 'sinatra/reloader'
-require './lib/example_class' # <<------- CHANGE THIS WHEN YOU CHANGE THE CLASS IF REQUIRED HERE #
+require_relative './models/bookmark'
 
-class AppName < Sinatra::Base
+class BookmarkManager < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
 
-  get '/' do
-    'CAPYBARA / RSPEC WORKING!'
+  get '/bookmarks' do
+    @bookmarks = Bookmark.all
+    erb(:'bookmarks/index')
+  end
+
+  post '/bookmarks' do
+    Bookmark.create(url: params[:bookmark_url])
+    redirect '/bookmarks'
   end
 
   run! if app_file == $PROGRAM_NAME
