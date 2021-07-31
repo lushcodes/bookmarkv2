@@ -18,6 +18,11 @@ class BookmarkManager < Sinatra::Base
     erb(:'bookmarks/index')
   end
 
+  get '/bookmarks/:id/edit' do
+    @bookmark = Bookmark.find(id: params[:id])
+    erb(:'bookmarks/edit')
+  end
+
   post '/bookmarks' do
     Bookmark.create(url: params[:bookmark_url], title: params[:bookmark_title])
     redirect '/bookmarks'
@@ -28,5 +33,10 @@ class BookmarkManager < Sinatra::Base
     redirect '/bookmarks'
   end
 
+  put '/bookmarks' do
+    bookmark = Bookmark.find(id: params[:bookmark_id])
+    bookmark.update(url: params[:bookmark_url], title: params[:bookmark_title])
+    redirect '/bookmarks'
+  end
   run! if app_file == $PROGRAM_NAME
 end

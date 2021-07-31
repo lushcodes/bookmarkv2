@@ -1,5 +1,7 @@
 <form action="/bookmarks" method="post"> <!--POSTS URL AND TITLE TO /BOOKMARKS-->
+  <label for="bookmark_url">URL</label>
   <input type="text" name="bookmark_url">
+  <label for="bookmark_title">Title</label>
   <input type="text" name="bookmark_title">
   <input type="submit" value="Save">
   </form>
@@ -9,12 +11,17 @@
 
 
 <div>
-  <% @bookmarks.each do |bookmark| %>                                   <!--takes each bookmark // (@bookmarks references variable from controller-->
+  <% @bookmarks.each do |bookmark| %>                                     <!--takes each bookmark // (@bookmarks references variable from controller-->
   <div class ="bookmark" id="<%= bookmark.id%>">
-    <a href="<%= bookmark.url %>"><%= bookmark.title %></a>               <!--displays a link for each bookmark using that bookmarks attributes-->
-    <form action="/bookmarks" method="post">                            <!--post method to /bookmarks that will be overidden by DELETE method-->
-      <input type=hidden name="bookmark_id" value="<%= bookmark.id %>"> <!--sends bookmark.id as a param to delete method on controller-->
-      <input type=hidden name="_method" value="DELETE">                 <!--REQUIRED TO OVERRIDE THE METHOD // THIS IS IMPORTANT TO UNDERSTAND-->
+    <a href=<%= bookmark.url %>><%= bookmark.title %></a>                  <!--displays a link for each bookmark using that bookmarks attributes-->
+
+    <form action="<%="/bookmarks/#{bookmark.id}/edit"%>" method="get">    
+      <input type=submit value="Edit">
+    </form>
+    
+    <form action="/bookmarks" method="post">                              <!--post method to /bookmarks that will be overidden by DELETE method-->
+      <input type="hidden" name="bookmark_id" value="<%= bookmark.id %>"> <!--sends bookmark.id as a param to delete method on controller-->
+      <input type="hidden" name="_method" value="DELETE">                 <!--REQUIRED TO OVERRIDE THE METHOD // THIS IS IMPORTANT TO UNDERSTAND-->
       <input type=submit value="Delete">
     </form>
   </div>

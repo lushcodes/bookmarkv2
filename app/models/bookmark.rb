@@ -28,6 +28,15 @@ class Bookmark
     connection.exec("INSERT INTO bookmarks (url, title) VALUES('#{url}', '#{title}');")
   end
 
+  def self.find(id:)
+    connection = PG.connect dbname: "bookmark_manager_#{ENV['RACK_ENV']}"
+    result = connection.exec("SELECT * FROM bookmarks WHERE id=#{id};")
+
+    result.map do |row|
+      Bookmark.new(id: row['id'], url: row['url'], title: row['title'])
+    end.first
+  end
+
   # deletes a bookmark object and removes it from the database
   def self.delete(id:)
     connection = PG.connect dbname: "bookmark_manager_#{ENV['RACK_ENV']}"
@@ -43,5 +52,10 @@ class Bookmark
     @id = id
     @url = url
     @title = title
+  end
+
+  def update(url: , title:)
+    connection = PG.connect dbname: "bookmark_manager_#{ENV['RACK_ENV']}"
+    connection.exec("UPDATE bookmarks SET url ='#{url}', title = '#{title}' WHERE id =#{id}")
   end
 end
