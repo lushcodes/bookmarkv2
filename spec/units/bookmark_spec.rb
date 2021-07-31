@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require './app/models/bookmark'
+require './lib/db_connection'
 
 describe Bookmark do
-
   describe '.find' do
     it 'returns a bookmark instance by id' do
       Bookmark.create(url: 'http://www.example.com', title: 'Example Title')
@@ -18,12 +18,12 @@ describe Bookmark do
 
   describe '.all' do
     it 'returns an array of bookmarks' do
-      connection = PG.connect dbname: "bookmark_manager_#{ENV['RACK_ENV']}"
-      connection.exec("INSERT INTO bookmarks (url, title) VALUES('http://www.example.com', 'Example Title');")
+      DBConnection.exec("INSERT INTO bookmarks (url, title) VALUES('http://www.example.com', 'Example Title');")
 
       bookmarks = Bookmark.all
 
       expect(bookmarks.first.url).to eq('http://www.example.com')
+      expect(bookmarks.first.title).to eq('Example Title')
     end
   end
 
@@ -38,8 +38,7 @@ describe Bookmark do
 
   describe '.update' do
     it 'updates a record in the table' do
-      connection = PG.connect dbname: "bookmark_manager_#{ENV['RACK_ENV']}"
-      connection.exec("INSERT INTO bookmarks (url, title) VALUES('http://www.example.com', 'Example Title');")
+      DBConnection.exec("INSERT INTO bookmarks (url, title) VALUES('http://www.example.com', 'Example Title');")
 
       bookmarks = Bookmark.all
       first_bookmark = bookmarks[0]
