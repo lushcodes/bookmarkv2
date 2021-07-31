@@ -7,6 +7,8 @@ require 'sinatra/reloader'
 require_relative './models/bookmark'
 
 class BookmarkManager < Sinatra::Base
+  enable :method_override # THIS ENABLES THE OVERRIDE HACK FOR DELETE METHOD
+
   configure :development do
     register Sinatra::Reloader
   end
@@ -17,7 +19,12 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/bookmarks' do
-    Bookmark.create(url: params[:bookmark_url])
+    Bookmark.create(url: params[:bookmark_url], title: params[:bookmark_title])
+    redirect '/bookmarks'
+  end
+
+  delete '/bookmarks' do
+    Bookmark.delete(id: params[:bookmark_id])
     redirect '/bookmarks'
   end
 

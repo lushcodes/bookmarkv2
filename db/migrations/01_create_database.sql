@@ -1,3 +1,4 @@
 /* RUN THE COMMAND IN POSTGRESQL TO CREATE YOUR DATABASE BUT BE SURE TO CHANGE IT TO A NAME YOU WANT! */
 
-CREATE DATABASE your_database_name_here;
+CREATE DATABASE bookmark_manager_test;
+CREATE DATABASE bookmark_manager_development;

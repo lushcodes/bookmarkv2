@@ -1,17 +1,22 @@
-<form action="/bookmarks" method="post">
+<form action="/bookmarks" method="post"> <!--POSTS URL AND TITLE TO /BOOKMARKS-->
   <input type="text" name="bookmark_url">
+  <input type="text" name="bookmark_title">
   <input type="submit" value="Save">
   </form>
 
 
 
 
+
 <div>
-  <ul>
-    <% @bookmarks.each do |bookmark| %>
-    <li><%= bookmark.url %></li>
+  <% @bookmarks.each do |bookmark| %>                                   <!--takes each bookmark // (@bookmarks references variable from controller-->
+  <div class ="bookmark" id="<%= bookmark.id%>">
+    <a href="<%= bookmark.url %>"><%= bookmark.title %></a>               <!--displays a link for each bookmark using that bookmarks attributes-->
+    <form action="/bookmarks" method="post">                            <!--post method to /bookmarks that will be overidden by DELETE method-->
+      <input type=hidden name="bookmark_id" value="<%= bookmark.id %>"> <!--sends bookmark.id as a param to delete method on controller-->
+      <input type=hidden name="_method" value="DELETE">                 <!--REQUIRED TO OVERRIDE THE METHOD // THIS IS IMPORTANT TO UNDERSTAND-->
+      <input type=submit value="Delete">
+    </form>
+  </div>
   <% end %>
-  </ul>
-
-
 </div>
